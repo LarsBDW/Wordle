@@ -8,7 +8,7 @@
     document.documentElement.classList.toggle('no-motion',!settings.animations); $('#animations').checked=settings.animations; $('#sound').checked=settings.sound;
     document.querySelectorAll('[data-length]').forEach(b=>b.classList.toggle('selected',+b.dataset.length===game.length)); board.style.setProperty('--columns',game.length); board.innerHTML='';
     for(let r=0;r<6;r++) for(let c=0;c<game.length;c++){const rowWord=game.guesses[r]?.word||(r===game.guesses.length?game.current:'');let tile=document.createElement('div'), letter=rowWord[c]||''; tile.className='tile'; tile.textContent=letter; tile.setAttribute('role','gridcell'); if(game.guesses[r]) tile.classList.add(game.guesses[r].states[c],'revealed'); if(r===game.guesses.length&&letter) tile.classList.add('filled'); board.append(tile);}
-    keyboard.innerHTML=''; rows.forEach((line,i)=>{let row=document.createElement('div');row.className='key-row'; if(i===2) row.append(key('ENTER','wide')); [...line].forEach(l=>row.append(key(l,game.keys[l]||''))); if(i===2)row.append(key('⌫','wide')); keyboard.append(row);});
+    keyboard.innerHTML=''; keyboard.style.pointerEvents='auto'; keyboard.style.position='relative'; keyboard.style.zIndex='10000'; keyboard.style.touchAction='manipulation'; rows.forEach((line,i)=>{let row=document.createElement('div');row.className='key-row'; if(i===2) row.append(key('ENTER','wide')); [...line].forEach(l=>row.append(key(l,game.keys[l]||''))); if(i===2)row.append(key('⌫','wide')); keyboard.append(row);});
   }
   function key(label,state){
     const b=document.createElement('button');
@@ -17,18 +17,22 @@
     b.dataset.key=label;
     b.textContent=label;
     b.setAttribute('aria-label',label==='⌫'?'Backspace':label);
-    b.setAttribute('role','button');
     b.tabIndex=0;
+    b.disabled=false;
+    // Force the on-screen keys above decorative/positioned elements.
     b.style.pointerEvents='auto';
+    b.style.position='relative';
+    b.style.zIndex='10000';
     b.style.touchAction='manipulation';
 
-    // Bind the action directly to every on-screen key.
-    // The keyboard is rebuilt after each input, so the handler is attached here.
-    b.addEventListener('click', event=>{
+    const activate=(event)=>{
       event.preventDefault();
       event.stopPropagation();
       input(label);
-    });
+    };
+    // pointerdown makes the keyboard work reliably with mouse, touch and pen.
+    b.addEventListener('pointerdown',activate);
+    b.addEventListener('click',activate);
     return b;
   }
   function evaluate(word,answer){let out=Array(word.length).fill('absent'), pool=[...answer]; [...word].forEach((l,i)=>{if(l===answer[i]){out[i]='correct';pool[i]=null}}); [...word].forEach((l,i)=>{if(out[i]==='correct')return;let p=pool.indexOf(l);if(p>-1){out[i]='present';pool[p]=null}});return out}
@@ -41,21 +45,7 @@
   function easter(w){if(w==='goose'){react('Honk honk!',true);document.querySelector('.flying-goose').classList.add('fly-now')}if(w==='honk'){honk()}if(w==='egg')$('#egg').classList.add('show');if(w==='fish'){$('#fish').classList.add('jump');setTimeout(()=>$('#fish').classList.remove('jump'),1000)}if(w==='king'){document.querySelectorAll('.goose,.flying-goose').forEach(g=>g.classList.add('crowned'));setTimeout(()=>document.querySelectorAll('.goose,.flying-goose').forEach(g=>g.classList.remove('crowned')),1800)}}
   function end(won){game.finished=true;save();let st=JSON.parse(localStorage.getItem('gooseStats')||'{"played":0,"wins":0,"streak":0,"best":0,"dist":[0,0,0,0,0,0]}');st.played++;if(won){st.wins++;st.streak++;st.best=Math.max(st.best,st.streak);st.dist[game.guesses.length-1]++;react('Nice!',true);honk();confetti();document.querySelectorAll('.goose,.flying-goose').forEach(g=>g.classList.add('crowned'));document.querySelector('.game').classList.add('celebrate')}else{st.streak=0;react('Honk?',true)}localStorage.setItem('gooseStats',JSON.stringify(st));$('#result-icon').textContent=won?'🎉🪿':'🪿';$('#result-title').textContent=won?'HONK! You got it!':'Honk? So close!';$('#result-copy').innerHTML=`The word was:<strong>${game.answer.toUpperCase()}</strong>`;setTimeout(()=>$('#result-modal').showModal(),300)}
   function stats(){let s=JSON.parse(localStorage.getItem('gooseStats')||'{"played":0,"wins":0,"streak":0,"best":0,"dist":[0,0,0,0,0,0]}'), pct=s.played?Math.round(s.wins/s.played*100):0;$('#statistics').innerHTML=`<div class="statline"><b>${s.played}</b><span>Played</span><b>${pct}%</b><span>Wins</span><b>${s.streak}</b><span>Streak</span><b>${s.best}</b><span>Best</span></div><h3>Guess distribution</h3>${s.dist.map((n,i)=>`<div class="bar"><i style="width:${Math.max(18,n*35)}px">${i+1} &nbsp; ${n}</i></div>`).join('')}`;}
-  document.addEventListener('keydown',e=>{
-    if(document.querySelector('dialog[open]'))return;
-    if(e.ctrlKey||e.metaKey||e.altKey)return;
-    const keyValue=e.key.toUpperCase();
-    if(keyValue==='ENTER'||keyValue==='BACKSPACE'||/^[A-Z]$/.test(keyValue)){
-      e.preventDefault();
-      input(keyValue);
-    }
-  });
-
-  // Fallback delegation for the on-screen keyboard.
-  keyboard.addEventListener('click',e=>{
-    const button=e.target.closest?.('.key');
-    if(button?.dataset.key) input(button.dataset.key);
-  });
+  document.addEventListener('keydown',e=>{if(document.querySelector('dialog[open]'))return; input(e.key.toUpperCase())});keyboard.addEventListener('click',e=>{if(e.target.dataset.key)input(e.target.dataset.key)});
   document.querySelectorAll('[data-length]').forEach(b=>b.onclick=()=>{if(!game.finished&&!confirm('Start a new game with a different word length?'))return;game=newGame(+b.dataset.length);localStorage.setItem('gooseLength',game.length);save();render()});
   $('.play-again').onclick=()=>{game=newGame(game.length);save();$('#result-modal').close();$('.game').classList.remove('celebrate');document.querySelectorAll('.goose,.flying-goose').forEach(g=>g.classList.remove('crowned'));render()};document.querySelectorAll('.goose-sprite').forEach(g=>g.onclick=()=>honk(true));document.querySelectorAll('.close').forEach(b=>b.onclick=()=>b.closest('dialog').close());$('.settings-toggle').onclick=()=>$('#settings-modal').showModal();$('.stats-toggle').onclick=()=>{stats();$('#stats-modal').showModal()};$('#sound').onchange=e=>{settings.sound=e.target.checked;localStorage.setItem('gooseSettings',JSON.stringify(settings))};$('#animations').onchange=e=>{settings.animations=e.target.checked;localStorage.setItem('gooseSettings',JSON.stringify(settings));render()};$('#reset-data').onclick=()=>{if(confirm('Reset all GooseWordle games and statistics?')){localStorage.removeItem('gooseGame');localStorage.removeItem('gooseStats');location.reload()}};load();
 })();
