@@ -1,4 +1,4 @@
-/* words.js — auto-generated 2026-09-16T18:37:04.347Z */
+/* words.js — auto-generated 2026-09-16T18:42:19.226Z */
 /* Source: dwyl/english-words (words_alpha.txt) */
 
 window.GOOSE_WORDS = {
