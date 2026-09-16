@@ -372,7 +372,7 @@
     const box = $('#confetti');
 
     box.innerHTML = Array.from(
-      { length: 140 },
+      { length: 450 },
       (_, i) =>
         `<i style="--x:${Math.round(
           Math.random() * 100
