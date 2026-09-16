@@ -1,0 +1,169 @@
+:root{--sky:#bfe3ff;--ink:#17324d;--tile:#6b7280;--green:#42c96d;--yellow:#facc15;font-family:Nunito,system-ui,sans-serif;color:var(--ink)}
+*{box-sizing:border-box}
+body{margin:0;min-width:320px;background:var(--sky)}
+button{font:inherit;cursor:pointer}
+button:focus-visible{outline:3px solid #17324d;outline-offset:3px}
+.sky{min-height:100svh;overflow:hidden;position:relative;background:radial-gradient(circle at 50% 30%,#dbf3ff 0,#bfe3ff 53%,#abdafa 100%);isolation:isolate;padding:18px 14px 24px}
+.game{position:relative;z-index:3;margin:auto;width:min(100%,560px);text-align:center}
+header{padding:0 0 10px}
+header h1{font:800 clamp(43px,8vw,72px)/.82 'Baloo 2',sans-serif;letter-spacing:-3px;margin:0;color:#fff;text-shadow:-3px 0 #17324d,0 3px #17324d,3px 0 #17324d,0 -3px #17324d,0 5px 0 #3971a8}
+header h1 span{color:#255889}
+.brand{display:flex;justify-content:center;align-items:end;gap:5px}
+.brand-goose{font-size:clamp(38px,7vw,62px);margin-bottom:3px;filter:drop-shadow(1px 3px 0 #17324d)}
+header p{font-size:clamp(16px,2.5vw,20px);font-weight:800;letter-spacing:.5px;margin:8px 0}
+.lengths{display:flex;justify-content:center;margin:8px auto 18px;max-width:430px;border-radius:13px;overflow:hidden;box-shadow:0 3px 0 #82bbe1}
+.lengths button{flex:1;border:1px solid #a3d4f1;background:#e9f7ff;color:#174572;padding:9px 4px;font-weight:800;font-size:16px}
+.lengths button+button{border-left:0}
+.lengths .selected{background:linear-gradient(135deg,#2b81c6,#42afe7);color:#fff;box-shadow:inset 0 0 0 2px #e5f7ff}
+.message{height:20px;color:#fff;font-weight:800;opacity:0;transition:.15s}
+.message.show{opacity:1}
+.board{--columns:6;display:grid;grid-template-columns:repeat(var(--columns),minmax(34px,58px));gap:6px;justify-content:center;margin:2px auto 22px}
+.tile{height:clamp(44px,9.8vw,58px);border:2px solid #71b4df;background:rgba(192,229,249,.48);border-radius:8px;display:grid;place-items:center;text-transform:uppercase;font-size:clamp(22px,5vw,30px);font-weight:900;color:#fff;box-shadow:inset 0 1px #e6f8ff}
+.tile.filled{background:#68778a;border-color:#68778a;animation:pop .1s ease-out}
+.tile.revealed{border-color:transparent}
+.tile.absent{background:#5d6b7e}
+.tile.present{background:var(--yellow)}
+.tile.correct{background:var(--green)}
+.tile.flip{animation:flip .52s ease forwards}
+.keyboard{width:min(100%,500px);margin:auto;display:grid;gap:6px}
+.key-row{display:flex;justify-content:center;gap:5px}
+.key{border:0;border-radius:7px;background:#607084;color:white;height:45px;min-width:30px;flex:1;font-size:17px;font-weight:900;box-shadow:0 2px 0 rgba(35,72,103,.28)}
+.key.wide{flex:1.55;font-size:12px}
+.key.absent{background:#425163}
+.key.present{background:var(--yellow)}
+.key.correct{background:#35bf66}
+.motto{font-size:14px;font-weight:800;margin:18px 0 0;color:#205581}
+.corner{position:absolute;z-index:5;top:24px;width:45px;height:45px;border:0;border-radius:50%;background:rgba(255,255,255,.72);color:#285982;font-size:24px}
+.settings-toggle{left:26px}
+.stats-toggle{right:26px}
+.cloud{position:absolute;z-index:0;width:125px;height:38px;background:rgba(255,255,255,.75);border-radius:30px}
+.cloud:before,.cloud:after{content:"";position:absolute;background:inherit;border-radius:50%}
+.cloud:before{width:65px;height:65px;left:18px;bottom:0}
+.cloud:after{width:45px;height:45px;right:15px;bottom:0}
+.cloud-a{top:88px;left:11%;animation:drift 40s linear infinite}
+.cloud-b{top:190px;right:6%;transform:scale(.7);animation:drift 55s -20s linear infinite}
+.cloud-c{top:370px;left:-30px;transform:scale(.6);animation:drift 46s -10s linear infinite}
+.feather{position:absolute;color:#fff;font-size:31px;opacity:.85;z-index:1;animation:feather 11s ease-in-out infinite}
+.f1{top:16%;left:80%}
+.f2{top:42%;left:12%;animation-delay:-4s}
+.f3{top:68%;right:20%;animation-delay:-7s}
+.f4{top:82%;left:5%;animation-delay:-2s}
+.goose{position:absolute;z-index:2}
+.friend{left:max(20px,5vw);bottom:55px;display:flex;flex-direction:column;align-items:center;animation:bob 3s ease-in-out infinite}
+.goose-body{font-size:clamp(80px,12vw,150px);filter:drop-shadow(1px 3px 0 #35536d)}
+.bubble{opacity:0;background:#dff4ff;border:3px solid #3982bb;padding:6px 10px;border-radius:50%;font-size:18px;font-weight:900;transform:rotate(-9deg);transition:.2s}
+.bubble.show{opacity:1}
+.pond-goose{right:max(25px,6vw);bottom:34px;font-size:75px;text-align:center}
+.pond{position:absolute;z-index:-1;width:180px;height:48px;bottom:5px;left:50%;transform:translateX(-50%);border-radius:50%;background:#80cdf6;border:3px solid #4f9ed0;box-shadow:inset 0 10px #b6e7ff}
+.fish{position:absolute;font-size:25px;left:0;bottom:26px;opacity:0}
+.fish.jump{animation:jump 1s}
+.grass{position:absolute;bottom:0;z-index:1;font-size:clamp(24px,4vw,45px);opacity:.9}
+.left-grass{left:0}
+.right-grass{right:0}
+.egg{opacity:0;position:absolute;z-index:2;bottom:52px;left:14%;font-size:35px;transition:.3s}
+.egg.show{opacity:1;animation:pop .35s}
+.flying-goose{position:absolute;z-index:1;top:130px;left:-12%;font-size:58px;transform:rotate(8deg);animation:fly 25s linear infinite}
+.fly-now{animation:fly .9s linear 2!important}
+.crowned .goose-body:before{content:'♛';color:#facc15;position:absolute;font-size:40px;top:-17px;left:40%;transform:rotate(-10deg)}
+.modal{border:3px solid #75bae2;border-radius:22px;background:#eaf8ff;color:var(--ink);padding:28px 34px 25px;text-align:center;box-shadow:0 16px 50px #366a9166;max-width:min(92vw,390px)}
+.modal::backdrop{background:#183d6070}
+.modal h2{font:800 30px 'Baloo 2';margin:0 0 8px}
+.modal p{font-size:17px;margin:5px 0 20px}
+.modal strong{display:block;font-size:25px;letter-spacing:3px}
+.modal #result-icon{font-size:55px}
+.modal .close{position:absolute;right:10px;top:7px;border:0;background:transparent;color:#416c8e;font-size:29px}
+.modal .play-again,.quiet{border:0;border-radius:12px;background:#2e91d1;color:#fff;padding:11px 25px;font-weight:900;font-size:17px;box-shadow:0 3px 0 #176fa9}
+.small{text-align:left}
+.small h2{text-align:center}
+.small label{display:block;padding:10px 2px;font-weight:800}
+.quiet{display:block;margin:14px auto 0;background:#738397;box-shadow:0 3px 0 #536476}
+.statline{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;gap:2px}
+.statline b{font-size:24px}
+.statline span{font-size:11px}
+.small h3{margin:20px 0 6px}
+.bar{height:23px;background:#d3edfc;margin:5px 0}
+.bar i{display:block;min-width:55px;height:100%;padding:2px 7px;background:#49c976;color:#fff;font-style:normal;font-weight:900}
+.shake{animation:shake .45s}
+.celebrate .tile.correct{animation:hop .55s ease-in-out infinite alternate}
+.no-motion *{animation:none!important;transition:none!important}
+@keyframes pop{50%{transform:scale(1.08)}
+}
+@keyframes flip{0%{transform:rotateX(0)}
+49%{transform:rotateX(90deg)}
+50%{transform:rotateX(90deg)}
+100%{transform:rotateX(0)}
+}
+@keyframes shake{25%,75%{transform:translateX(7px)}
+50%{transform:translateX(-7px)}
+}
+@keyframes hop{to{transform:translateY(-7px)}
+}
+@keyframes bob{50%{transform:translateY(-9px) rotate(2deg)}
+}
+@keyframes drift{to{translate:110vw 0}
+}
+@keyframes feather{50%{transform:translate(30px,55px) rotate(50deg);opacity:.45}
+}
+@keyframes fly{0%{translate:0 0}
+100%{translate:120vw -50px}
+}
+@keyframes jump{0%,100%{transform:translateY(0);opacity:0}
+20%,75%{opacity:1}
+55%{transform:translate(38px,-90px) rotate(40deg);opacity:1}
+}
+@media(max-width:650px){.sky{padding-top:20px}
+.corner{top:13px;width:37px;height:37px;font-size:20px}
+.settings-toggle{left:12px}
+.stats-toggle{right:12px}
+.friend{left:-10px;bottom:65px;transform:scale(.65)}
+.pond-goose{right:-12px;bottom:36px;transform:scale(.65)}
+.cloud-b,.cloud-c{display:none}
+.grass{font-size:24px}
+.flying-goose{display:none}
+.motto{margin-top:12px}
+.board{gap:4px;margin-bottom:17px}
+.key{height:42px;min-width:22px;font-size:14px}
+.key-row{gap:3px}
+.lengths{margin-bottom:10px}
+.egg{bottom:42px}
+}
+@media(max-height:760px) and (min-width:651px){.sky{padding-top:7px}
+.board{margin-bottom:12px}
+.tile{height:49px}
+.goose-body{font-size:90px}
+.pond-goose{transform:scale(.75);transform-origin:bottom}
+.motto{margin-top:10px}
+}
+
+/* Supplied meadow scene — the game remains layered above it. */
+.sky{background:#bfe3ff url('../images/goose-meadow-background.png') center center/cover no-repeat fixed}
+.grass,.pond-goose{display:none}
+@media(max-width:650px){.sky{background-attachment:scroll}}
+
+@media(max-height:760px) and (min-width:651px){
+  .sky{padding-top:5px}
+  header{padding-bottom:2px}
+  header h1{font-size:48px}
+  .brand-goose{font-size:42px}
+  header p{margin:3px 0;font-size:16px}
+  .lengths{margin:4px auto 8px}
+  .lengths button{padding:6px 4px}
+  .message{height:13px}
+  .board{gap:4px;margin-bottom:10px}
+  .tile{height:43px}
+  .keyboard{gap:4px}
+  .key-row{gap:4px}
+  .key{height:36px}
+  .motto{margin-top:8px}
+}
+
+/* Goose cut-outs from the supplied illustration sheet. */
+.goose-sprite{border:0;padding:0;background-color:transparent;background-repeat:no-repeat;background-size:contain;background-position:center;filter:drop-shadow(1px 3px 1px #28516a66);position:relative;cursor:pointer}
+.goose-sprite:hover{filter:drop-shadow(0 0 7px #fff) drop-shadow(1px 3px 1px #28516a66)}
+.standing-goose{width:155px;height:196px;background-image:url('../images/standing-goose.png')}
+.pond-goose{display:block;right:max(25px,6vw);bottom:27px;width:175px;height:160px;text-align:center}
+.sleepy-goose{width:175px;height:160px;background-image:url('../images/sleepy-goose.png')}
+.flying-goose{width:210px;height:170px;background-image:url('../images/flying-goose.png');background-color:transparent;animation:fly 26s linear infinite}
+.crowned{position:relative!important}.crowned:after{content:'♛';position:absolute;color:#facc15;text-shadow:1px 2px #9b6e00;font-size:43px;line-height:1;top:-24px;left:45%;z-index:5;animation:pop .45s infinite alternate}
+.confetti{position:fixed;z-index:20;inset:0;pointer-events:none;overflow:hidden}.confetti i{position:absolute;top:-16px;left:var(--x);width:9px;height:15px;background:hsl(calc(var(--x) * 3.6),88%,58%);transform:rotate(var(--r));animation:confetti var(--d) ease-in forwards}.confetti i:nth-child(3n){background:#facc15;border-radius:50%}.confetti i:nth-child(4n){background:#42c96d}.confetti.show i{display:block}@keyframes confetti{to{top:104vh;transform:translateX(calc((var(--x) - 50%) * .65)) rotate(calc(var(--r) + 720deg));opacity:0}}
+@media(max-width:650px){.standing-goose{transform:scale(.68);transform-origin:bottom left}.friend{left:0;bottom:26px}.pond-goose{right:-28px;bottom:16px;transform:scale(.57);transform-origin:bottom right}.flying-goose{transform:scale(.58);transform-origin:left top}}
