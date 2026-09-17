@@ -1261,7 +1261,7 @@ window.GOOSE_WORDS = {
     "savko", "savon", "savoy", "savvy", "sawdy", "sawed", "sawin", "sawka", "saxby", "saxer", "sayad", "sayed",
     "sayer", "sayle", "sayre", "scads", "scaff", "scags", "scalf", "scali", "scams", "scans", "scapa", "scape",
     "scarp", "scary", "scavo", "schab", "schad", "schar", "schau", "scher", "scheu", "schey", "schoo", "schor",
-    "teams", 
+    "teams", "teens"
   ],
   6: [
     "pierre", "prince", "before", "should", "andrew", "french", "little", "states", "people", "rostov", "looked", "moscow",
