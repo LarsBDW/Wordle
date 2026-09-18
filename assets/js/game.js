@@ -220,11 +220,28 @@
     // board as a real guess, then show the jumpscare over the existing game.
     if (game.current.toLowerCase() === 'goose') {
       const gooseWord = 'goose';
-      const states = Array(gooseWord.length).fill('absent');
+
+      // Evaluate GOOSE exactly like a normal Wordle guess so the board
+      // and keyboard show correct / present / absent letters.
+      const states = evaluate(gooseWord, game.answer);
 
       game.guesses.push({
         word: gooseWord,
         states
+      });
+
+      // Update the on-screen keyboard with the result of GOOSE.
+      states.forEach((s, i) => {
+        const l = gooseWord[i];
+        const old = game.keys[l];
+
+        if (
+          !old ||
+          s === 'correct' ||
+          (s === 'present' && old === 'absent')
+        ) {
+          game.keys[l] = s;
+        }
       });
 
       game.current = '';
