@@ -212,16 +212,39 @@
   }
 
   function submit() {
-    // Special easter egg: "goose" always triggers the jumpscare,
-    // regardless of the selected Wordle length or dictionary.
-    if (game.current.toLowerCase() === 'goose') {
-      game.current = '';
-      render();
-      jumpscare();
+    if (game.finished) {
       return;
     }
 
-    if (game.finished) {
+    // Special easter egg: accept "goose" in every mode, put it on the
+    // board as a real guess, then show the jumpscare over the existing game.
+    if (game.current.toLowerCase() === 'goose') {
+      const gooseWord = 'goose';
+      const states = Array(gooseWord.length).fill('absent');
+
+      game.guesses.push({
+        word: gooseWord,
+        states
+      });
+
+      game.current = '';
+      save();
+      render();
+
+      const start = (game.guesses.length - 1) * game.length;
+      const tiles = [...board.children].slice(
+        start,
+        start + gooseWord.length
+      );
+
+      tiles.forEach((t, i) => {
+        setTimeout(() => t.classList.add('flip'), i * 130);
+      });
+
+      easter(gooseWord);
+
+      // Give the letters a moment to appear before the scare covers them.
+      setTimeout(() => jumpscare(), gooseWord.length * 130 + 150);
       return;
     }
 
