@@ -203,6 +203,12 @@
       return;
     }
 
+    // Trigger the jumpscare even in 6/7-letter modes.
+    if (game.current.toLowerCase() === 'goose') {
+      gooseJumpscare();
+      return;
+    }
+
     if (game.current.length < game.length) {
       return notice('Not enough letters');
     }
@@ -395,31 +401,32 @@
   function gooseJumpscare() {
     const overlay = document.querySelector('#goose-jumpscare');
     const image = document.querySelector('#goose-jumpscare-image');
-
     if (!overlay || !image) return;
-
-    if (!image.dataset.sourceReady) {
-      const candidates = [
-        'image/goose-scare',
-        'image/goose-scare.png',
-        'image/goose-scare.jpg',
-        'image/goose-scare.jpeg',
-        'image/goose-scare.webp',
-        'image/goose-scare.gif'
-      ];
-      let i = 0;
-      image.src = candidates[i];
-      image.onerror = () => {
-        i++;
-        if (i < candidates.length) image.src = candidates[i];
-      };
-      image.onload = () => { image.dataset.sourceReady = 'true'; };
-    }
 
     overlay.classList.add('show');
     overlay.setAttribute('aria-hidden', 'false');
+
+    const candidates = [
+      'image/goose-scare',
+      'image/goose-scare.png',
+      'image/goose-scare.jpg',
+      'image/goose-scare.jpeg',
+      'image/goose-scare.webp',
+      'image/goose-scare.gif'
+    ];
+    if (!image.dataset.loaded) {
+      let i = 0;
+      const tryNext = () => {
+        if (i >= candidates.length) return;
+        image.src = candidates[i++];
+      };
+      image.onerror = tryNext;
+      image.onload = () => { image.dataset.loaded = 'true'; };
+      tryNext();
+    }
+
     clearTimeout(gooseJumpscare.timer);
-    gooseJumpscare.timer = setTimeout(hideGooseJumpscare, 2200);
+    gooseJumpscare.timer = setTimeout(hideGooseJumpscare, 2500);
   }
 
   function hideGooseJumpscare() {
@@ -429,8 +436,6 @@
     overlay.setAttribute('aria-hidden', 'true');
   }
 
-  document.querySelector('#goose-jumpscare')?.addEventListener('click', hideGooseJumpscare);
-
   function easter(w) {
     if (w === 'goose') {
       react('Honk honk!', true);
@@ -438,8 +443,6 @@
       document
         .querySelector('.flying-goose')
         .classList.add('fly-now');
-
-      gooseJumpscare();
     }
 
     if (w === 'honk') {
