@@ -60,7 +60,7 @@ header p{font-size:clamp(16px,2.5vw,20px);font-weight:800;letter-spacing:.5px;ma
 
 .key.wide{flex:1.55;font-size:12px}
 
-.key.absent{background:#FF8A8A}
+.key.absent{background:#ff6161}
 
 .key.present{background:var(--yellow)}
 
