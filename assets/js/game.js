@@ -392,6 +392,45 @@
     box.innerHTML = '';
   }
 
+  function gooseJumpscare() {
+    const overlay = document.querySelector('#goose-jumpscare');
+    const image = document.querySelector('#goose-jumpscare-image');
+
+    if (!overlay || !image) return;
+
+    if (!image.dataset.sourceReady) {
+      const candidates = [
+        'image/goose-scare',
+        'image/goose-scare.png',
+        'image/goose-scare.jpg',
+        'image/goose-scare.jpeg',
+        'image/goose-scare.webp',
+        'image/goose-scare.gif'
+      ];
+      let i = 0;
+      image.src = candidates[i];
+      image.onerror = () => {
+        i++;
+        if (i < candidates.length) image.src = candidates[i];
+      };
+      image.onload = () => { image.dataset.sourceReady = 'true'; };
+    }
+
+    overlay.classList.add('show');
+    overlay.setAttribute('aria-hidden', 'false');
+    clearTimeout(gooseJumpscare.timer);
+    gooseJumpscare.timer = setTimeout(hideGooseJumpscare, 2200);
+  }
+
+  function hideGooseJumpscare() {
+    const overlay = document.querySelector('#goose-jumpscare');
+    if (!overlay) return;
+    overlay.classList.remove('show');
+    overlay.setAttribute('aria-hidden', 'true');
+  }
+
+  document.querySelector('#goose-jumpscare')?.addEventListener('click', hideGooseJumpscare);
+
   function easter(w) {
     if (w === 'goose') {
       react('Honk honk!', true);
@@ -399,6 +438,8 @@
       document
         .querySelector('.flying-goose')
         .classList.add('fly-now');
+
+      gooseJumpscare();
     }
 
     if (w === 'honk') {

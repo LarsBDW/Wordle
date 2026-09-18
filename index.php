@@ -33,6 +33,10 @@
   <div class="grass left-grass">🌷　🌱　🌼</div><div class="grass right-grass">🌼　🌱　🌷</div>
   <div id="egg" class="egg" aria-hidden="true">🥚</div><div id="confetti" class="confetti" aria-hidden="true"></div>
 
+  <div id="goose-jumpscare" class="goose-jumpscare" aria-hidden="true" role="dialog" aria-label="Goose jumpscare">
+    <img id="goose-jumpscare-image" src="image/goose-scare" alt="Surprise goose">
+  </div>
+
   <dialog id="result-modal" class="modal"><button class="close" aria-label="Close">×</button><div id="result-icon">🪿</div><h2 id="result-title">HONK!</h2><p id="result-copy"></p><button class="play-again">Play Again</button></dialog>
   <dialog id="settings-modal" class="modal small"><button class="close" aria-label="Close">×</button><h2>Settings</h2><label><input type="checkbox" id="sound"> Gentle sounds</label><label><input type="checkbox" id="animations" checked> Decorative animations</label><button id="reset-data" class="quiet">Reset game data</button></dialog>
   <dialog id="stats-modal" class="modal small"><button class="close" aria-label="Close">×</button><h2>Flock statistics</h2><div id="statistics"></div></dialog>
