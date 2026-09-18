@@ -198,10 +198,26 @@
     return out;
   }
 
+  function jumpscare() {
+    const scare = document.querySelector('#goose-jumpscare');
+    if (!scare) return;
+
+    scare.classList.add('show');
+    scare.setAttribute('aria-hidden', 'false');
+
+    setTimeout(() => {
+      scare.classList.remove('show');
+      scare.setAttribute('aria-hidden', 'true');
+    }, 3000);
+  }
+
   function submit() {
-    // Special easter egg: "goose" bypasses normal Wordle length/dictionary checks.
+    // Special easter egg: "goose" always triggers the jumpscare,
+    // regardless of the selected Wordle length or dictionary.
     if (game.current.toLowerCase() === 'goose') {
-      triggerGooseJumpscare();
+      game.current = '';
+      render();
+      jumpscare();
       return;
     }
 
@@ -396,32 +412,6 @@
 
     box.classList.remove('show');
     box.innerHTML = '';
-  }
-
-  function triggerGooseJumpscare() {
-    const scare = $('#goose-jumpscare');
-    const image = $('#goose-jumpscare-image');
-
-    if (!scare || !image) {
-      console.error('Goose jumpscare elements are missing from index.php');
-      return;
-    }
-
-    image.src = 'image/goose-scare';
-    scare.classList.add('show');
-    scare.setAttribute('aria-hidden', 'false');
-
-    if (settings.sound) {
-      const audio = new Audio('assets/audio/honk-sound.mp3');
-      audio.volume = 0.8;
-      audio.play().catch(() => {});
-    }
-
-    clearTimeout(triggerGooseJumpscare.timer);
-    triggerGooseJumpscare.timer = setTimeout(() => {
-      scare.classList.remove('show');
-      scare.setAttribute('aria-hidden', 'true');
-    }, 2500);
   }
 
   function easter(w) {
@@ -648,15 +638,6 @@
     .forEach(g => {
       g.onclick = () => honk(true);
     });
-
-  const gooseJumpscare = $('#goose-jumpscare');
-  if (gooseJumpscare) {
-    gooseJumpscare.addEventListener('click', () => {
-      gooseJumpscare.classList.remove('show');
-      gooseJumpscare.setAttribute('aria-hidden', 'true');
-      clearTimeout(triggerGooseJumpscare.timer);
-    });
-  }
 
   // Close buttons
   document
