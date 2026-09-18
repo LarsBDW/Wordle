@@ -199,13 +199,13 @@
   }
 
   function submit() {
-    if (game.finished) {
+    // Special easter egg: "goose" bypasses normal Wordle length/dictionary checks.
+    if (game.current.toLowerCase() === 'goose') {
+      triggerGooseJumpscare();
       return;
     }
 
-    // Trigger the jumpscare even in 6/7-letter modes.
-    if (game.current.toLowerCase() === 'goose') {
-      gooseJumpscare();
+    if (game.finished) {
       return;
     }
 
@@ -398,42 +398,30 @@
     box.innerHTML = '';
   }
 
-  function gooseJumpscare() {
-    const overlay = document.querySelector('#goose-jumpscare');
-    const image = document.querySelector('#goose-jumpscare-image');
-    if (!overlay || !image) return;
+  function triggerGooseJumpscare() {
+    const scare = $('#goose-jumpscare');
+    const image = $('#goose-jumpscare-image');
 
-    overlay.classList.add('show');
-    overlay.setAttribute('aria-hidden', 'false');
-
-    const candidates = [
-      'image/goose-scare',
-      'image/goose-scare.png',
-      'image/goose-scare.jpg',
-      'image/goose-scare.jpeg',
-      'image/goose-scare.webp',
-      'image/goose-scare.gif'
-    ];
-    if (!image.dataset.loaded) {
-      let i = 0;
-      const tryNext = () => {
-        if (i >= candidates.length) return;
-        image.src = candidates[i++];
-      };
-      image.onerror = tryNext;
-      image.onload = () => { image.dataset.loaded = 'true'; };
-      tryNext();
+    if (!scare || !image) {
+      console.error('Goose jumpscare elements are missing from index.php');
+      return;
     }
 
-    clearTimeout(gooseJumpscare.timer);
-    gooseJumpscare.timer = setTimeout(hideGooseJumpscare, 2500);
-  }
+    image.src = 'image/goose-scare';
+    scare.classList.add('show');
+    scare.setAttribute('aria-hidden', 'false');
 
-  function hideGooseJumpscare() {
-    const overlay = document.querySelector('#goose-jumpscare');
-    if (!overlay) return;
-    overlay.classList.remove('show');
-    overlay.setAttribute('aria-hidden', 'true');
+    if (settings.sound) {
+      const audio = new Audio('assets/audio/honk-sound.mp3');
+      audio.volume = 0.8;
+      audio.play().catch(() => {});
+    }
+
+    clearTimeout(triggerGooseJumpscare.timer);
+    triggerGooseJumpscare.timer = setTimeout(() => {
+      scare.classList.remove('show');
+      scare.setAttribute('aria-hidden', 'true');
+    }, 2500);
   }
 
   function easter(w) {
@@ -660,6 +648,15 @@
     .forEach(g => {
       g.onclick = () => honk(true);
     });
+
+  const gooseJumpscare = $('#goose-jumpscare');
+  if (gooseJumpscare) {
+    gooseJumpscare.addEventListener('click', () => {
+      gooseJumpscare.classList.remove('show');
+      gooseJumpscare.setAttribute('aria-hidden', 'true');
+      clearTimeout(triggerGooseJumpscare.timer);
+    });
+  }
 
   // Close buttons
   document

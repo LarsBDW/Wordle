@@ -8,6 +8,34 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    .goose-jumpscare {
+      position: fixed;
+      inset: 0;
+      z-index: 2147483647;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      cursor: pointer;
+    }
+    .goose-jumpscare.show {
+      display: flex;
+      animation: gooseScareIn 0.08s steps(2, end);
+    }
+    .goose-jumpscare img {
+      display: block;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    @keyframes gooseScareIn {
+      0% { opacity: 0; transform: scale(1.12); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+  </style>
 </head>
 <body>
 <main class="sky">
@@ -32,6 +60,10 @@
   <aside class="goose pond-goose"><span class="bubble">Zzz...</span><button class="goose-sprite sleepy-goose" aria-label="Sleepy goose in the water — click to honk"></button><span id="fish" class="fish">🐟</span></aside>
   <div class="grass left-grass">🌷　🌱　🌼</div><div class="grass right-grass">🌼　🌱　🌷</div>
   <div id="egg" class="egg" aria-hidden="true">🥚</div><div id="confetti" class="confetti" aria-hidden="true"></div>
+
+  <div id="goose-jumpscare" class="goose-jumpscare" aria-hidden="true">
+    <img id="goose-jumpscare-image" src="image/goose-scare" alt="Surprise goose">
+  </div>
 
   <div id="goose-jumpscare" class="goose-jumpscare" aria-hidden="true" role="dialog" aria-label="Goose jumpscare">
     <img id="goose-jumpscare-image" src="image/goose-scare" alt="Surprise goose">
