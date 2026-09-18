@@ -44,7 +44,7 @@ header p{font-size:clamp(16px,2.5vw,20px);font-weight:800;letter-spacing:.5px;ma
 
 .tile.revealed{border-color:transparent}
 
-.tile.absent{background:#e53935;border-color:#e53935}
+.tile.absent{background:#5d6b7e}
 
 .tile.present{background:var(--yellow)}
 
@@ -60,7 +60,7 @@ header p{font-size:clamp(16px,2.5vw,20px);font-weight:800;letter-spacing:.5px;ma
 
 .key.wide{flex:1.55;font-size:12px}
 
-.key.absent{background:#e53935}
+.key.absent{background:#FF8A8A}
 
 .key.present{background:var(--yellow)}
 
