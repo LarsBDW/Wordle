@@ -32,6 +32,12 @@
   <aside class="goose pond-goose"><span class="bubble">Zzz...</span><button class="goose-sprite sleepy-goose" aria-label="Sleepy goose in the water — click to honk"></button><span id="fish" class="fish">🐟</span></aside>
   <div class="grass left-grass">🌷　🌱　🌼</div><div class="grass right-grass">🌼　🌱　🌷</div>
   <div id="egg" class="egg" aria-hidden="true">🥚</div><div id="confetti" class="confetti" aria-hidden="true"></div>
+  <div id="shark-surprise" class="shark-surprise" aria-hidden="true">
+    <span class="shark-splash splash-left">✦</span>
+    <span class="shark">🦈</span>
+    <span class="shark-splash splash-right">✦</span>
+    <strong>FIN-TASTIC!</strong>
+  </div>
 
   <div id="goose-jumpscare" class="goose-jumpscare" aria-hidden="true">
     <img src="assets/images/goose-scare.png" alt="Surprise goose">
