@@ -392,56 +392,6 @@ header p{font-size:clamp(16px,2.5vw,20px);font-weight:800;letter-spacing:.5px;ma
   display:block
 }
 
-/* SHARK easter egg: a friendly fin leaps over the pond when SHARK is guessed. */
-.shark-surprise{
-  position:fixed;
-  z-index:50;
-  right:5vw;
-  bottom:5vh;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  pointer-events:none;
-  opacity:0;
-  transform:translate(55px,120px) rotate(8deg);
-  transition:opacity .12s ease;
-}
-
-.shark-surprise.show{
-  opacity:1;
-  animation:shark-leap 2.2s cubic-bezier(.2,.7,.28,1) forwards
-}
-
-.shark-surprise .shark{
-  font-size:clamp(72px,10vw,145px);
-  filter:drop-shadow(0 7px 4px #21577966)
-}
-
-.shark-surprise strong{
-  align-self:flex-start;
-  margin-top:-12px;
-  padding:7px 13px;
-  border:3px solid #2173a7;
-  border-radius:18px 18px 18px 4px;
-  background:#e6f8ff;
-  color:#17537e;
-  font:800 clamp(15px,2vw,24px) 'Baloo 2',sans-serif;
-  transform:rotate(-9deg)
-}
-
-.shark-splash{
-  color:#e7fbff;
-  font-size:38px;
-  text-shadow:0 2px #3897cf
-}
-
-@keyframes shark-leap{
-  0%{transform:translate(55px,120px) rotate(8deg)}
-  35%{transform:translate(-35vw,-38vh) rotate(-15deg)}
-  68%{transform:translate(-66vw,-28vh) rotate(9deg)}
-  100%{transform:translate(-90vw,120px) rotate(-12deg);opacity:0}
-}
-
 @keyframes confetti{
   to{
     top:104vh;

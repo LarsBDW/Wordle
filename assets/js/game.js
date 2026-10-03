@@ -216,15 +216,6 @@
       return;
     }
 
-    // SHARK is a secret, non-consuming surprise in every word-length mode.
-    // It never affects the board, score, or remaining guesses.
-    if (game.current.toLowerCase() === 'shark') {
-      game.current = '';
-      render();
-      easter('shark');
-      return;
-    }
-
     // Special easter egg: accept "goose" in every mode, put it on the
     // board as a real guess, then show the jumpscare over the existing game.
     if (game.current.toLowerCase() === 'goose') {
@@ -463,19 +454,6 @@
     box.innerHTML = '';
   }
 
-  function sharkSurprise() {
-    const shark = $('#shark-surprise');
-
-    shark.classList.add('show');
-    shark.setAttribute('aria-hidden', 'false');
-    react('Did someone say shark?', true);
-
-    setTimeout(() => {
-      shark.classList.remove('show');
-      shark.setAttribute('aria-hidden', 'true');
-    }, 2200);
-  }
-
   function easter(w) {
     if (w === 'goose') {
       react('Honk honk!', true);
@@ -501,10 +479,6 @@
           $('#fish').classList.remove('jump'),
         1000
       );
-    }
-
-    if (w === 'shark') {
-      sharkSurprise();
     }
 
     if (w === 'king') {
