@@ -34,13 +34,13 @@
   };
 
   // IMPORTANT:
-  // GOOSE_ANSWERS = only words that can be the answer.
+  // GOOSE_TARGETS = only words that can be the answer.
   // GOOSE_WORDS   = all words that are allowed as guesses.
   const newGame = len => ({
     length: len,
     answer:
-      GOOSE_ANSWERS[len][
-        Math.floor(Math.random() * GOOSE_ANSWERS[len].length)
+      GOOSE_TARGETS[len][
+        Math.floor(Math.random() * GOOSE_TARGETS[len].length)
       ],
     guesses: [],
     current: '',
@@ -272,13 +272,13 @@
     // GOOSE_WORDS contains ALL valid guesses.
     const dict = GOOSE_WORDS[game.length];
 
-    // GOOSE_ANSWERS contains the smaller list of possible answers.
+    // GOOSE_TARGETS contains the smaller list of possible answers.
     // Therefore:
     // - Any word from GOOSE_WORDS can be guessed.
-    // - Only words from GOOSE_ANSWERS can be selected as answers.
+    // - Only words from GOOSE_TARGETS can be selected as answers.
     if (
       !dict.includes(game.current) &&
-      !GOOSE_ANSWERS[game.length].includes(game.current)
+      !GOOSE_TARGETS[game.length].includes(game.current)
     ) {
       return shake('That goose does not know this word');
     }
