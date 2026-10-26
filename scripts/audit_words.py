@@ -5,7 +5,8 @@ from pathlib import Path
 
 game_source = Path("assets/js/words.js").read_text(encoding="utf-8")
 word_data = json.loads(game_source.split("window.GOOSE_WORDS=", 1)[1].split(";\nwindow.GOOSE_TARGETS=", 1)[0])
-targets = json.loads(game_source.split("window.GOOSE_TARGETS=", 1)[1].rstrip(";\n"))
+target_source = game_source.split("window.GOOSE_TARGETS=", 1)[1].rstrip(";\n")
+targets = word_data if target_source == "window.GOOSE_WORDS" else json.loads(target_source)
 enable = {
     word.strip().lower()
     for word in Path("assets/data/enable1.txt").read_text(encoding="utf-8").splitlines()
