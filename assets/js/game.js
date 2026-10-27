@@ -26,6 +26,8 @@
         ? saved
         : newGame(+localStorage.getItem('gooseLength') || 6);
 
+    localStorage.setItem(`gooseLastAnswer${game.length}`, game.answer);
+    save();
     render();
 
     if (game.finished && game.won) {
@@ -36,18 +38,24 @@
   // IMPORTANT:
   // GOOSE_TARGETS = only words that can be the answer.
   // GOOSE_WORDS   = all words that are allowed as guesses.
-  const newGame = len => ({
+  const newGame = len => {
+    // Also read older saved games so the first game after this update cannot repeat.
+    const saved = JSON.parse(localStorage.getItem('gooseGame') || 'null');
+    const previous = localStorage.getItem(`gooseLastAnswer${len}`) ||
+      (saved?.length === len ? saved.answer : null);
+    const pool = GOOSE_TARGETS[len].filter(word => word !== previous);
+    const answer = pool[Math.floor(Math.random() * pool.length)];
+    localStorage.setItem(`gooseLastAnswer${len}`, answer);
+    return {
     length: len,
-    answer:
-      GOOSE_TARGETS[len][
-        Math.floor(Math.random() * GOOSE_TARGETS[len].length)
-      ],
+    answer,
     guesses: [],
     current: '',
     finished: false,
     won: false,
     keys: {}
-  });
+    };
+  };
 
   const save = () => {
     localStorage.setItem('gooseGame', JSON.stringify(game));
@@ -728,6 +736,7 @@
     ) {
       localStorage.removeItem('gooseGame');
       localStorage.removeItem('gooseStats');
+      [5, 6, 7].forEach(len => localStorage.removeItem(`gooseLastAnswer${len}`));
 
       location.reload();
     }
