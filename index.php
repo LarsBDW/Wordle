@@ -1,5 +1,8 @@
 <?php
 // GooseWordle is intentionally client-side: localStorage keeps games private and persistent.
+// Fetch matching scripts after every deployment instead of using an older cached list.
+$wordsVersion = hash_file('sha256', __DIR__ . '/assets/js/words.js');
+$gameVersion = hash_file('sha256', __DIR__ . '/assets/js/game.js');
 ?><!doctype html>
 <html lang="en">
 <head>
@@ -69,5 +72,5 @@
   <dialog id="settings-modal" class="modal small"><button class="close" aria-label="Close">×</button><h2>Settings</h2><label><input type="checkbox" id="sound"> Gentle sounds</label><label><input type="checkbox" id="animations" checked> Decorative animations</label><button id="reset-data" class="quiet">Reset game data</button></dialog>
   <dialog id="stats-modal" class="modal small"><button class="close" aria-label="Close">×</button><h2>Flock statistics</h2><div id="statistics"></div></dialog>
 </main>
-<script src="assets/js/words.js"></script><script src="assets/js/game.js"></script>
+<script src="assets/js/words.js?v=<?= $wordsVersion ?>"></script><script src="assets/js/game.js?v=<?= $gameVersion ?>"></script>
 </body></html>

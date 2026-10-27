@@ -21,6 +21,7 @@
     game =
       saved &&
       saved.answer &&
+      GOOSE_TARGETS[saved.length]?.includes(saved.answer) &&
       saved.guesses?.length < 6 &&
       !saved.finished
         ? saved
@@ -47,13 +48,13 @@
     const answer = pool[Math.floor(Math.random() * pool.length)];
     localStorage.setItem(`gooseLastAnswer${len}`, answer);
     return {
-    length: len,
-    answer,
-    guesses: [],
-    current: '',
-    finished: false,
-    won: false,
-    keys: {}
+      length: len,
+      answer,
+      guesses: [],
+      current: '',
+      finished: false,
+      won: false,
+      keys: {}
     };
   };
 
